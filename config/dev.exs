@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :python_phoenix_demo, PythonPhoenixDemo.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "python_phoenix_demo",
+  password: "python_phoenix_demo",
   hostname: "localhost",
   database: "python_phoenix_demo_dev",
   stacktrace: true,
