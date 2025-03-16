@@ -14,64 +14,54 @@ alias PythonPhoenixDemo.MediaPayload
 
 data = [
   %{
-    path:
-      "https://github.com/tattle-made/feluda_datasets/raw/main/clustering-media/video/v_ApplyEyeMakeup_g03_c01.avi",
-    id: "a5cb2152-77cf-4898-8616-96c3d67c82fb",
-    media_type: "video"
+    path: "https://github.com/aatmanvaidya/audio-files/raw/main/images/1.jpeg",
+    id: "ae8f0915-832f-4e50-bb55-e4b2c2d30625",
+    media_type: "image"
   },
   %{
-    path:
-      "https://github.com/tattle-made/feluda_datasets/raw/main/clustering-media/video/v_ApplyLipstick_g14_c03.avi",
-    id: "be43e3c8-354d-4c55-8c0c-5d8fc5f43c9f",
-    media_type: "video"
+    path: "https://github.com/aatmanvaidya/audio-files/raw/main/images/2.jpeg",
+    id: "d7fb90e7-7520-4761-8b89-d5d21b973d8a",
+    media_type: "image"
   },
   %{
-    path:
-      "https://github.com/tattle-made/feluda_datasets/raw/main/clustering-media/video/v_Archery_g16_c05.avi",
-    id: "fa328003-65ff-4e7f-9c2e-6e1f29e1f5d8",
-    media_type: "video"
+    path: "https://github.com/aatmanvaidya/audio-files/raw/main/images/3.jpeg",
+    id: "f6d6064e-e097-44f1-b738-8917d5c1c829",
+    media_type: "image"
   },
   %{
-    path:
-      "https://github.com/tattle-made/feluda_datasets/raw/main/clustering-media/video/v_BabyCrawling_g03_c01.avi",
-    id: "dc7b2c14-62da-42b6-a4b8-3d48de12a1d0",
-    media_type: "video"
+    path: "https://github.com/aatmanvaidya/audio-files/raw/main/images/4.png",
+    id: "d12a1fd6-d20c-4b89-9f4e-842b49f03856",
+    media_type: "image"
   },
   %{
-    path:
-      "https://github.com/tattle-made/feluda_datasets/raw/main/clustering-media/video/v_BalanceBeam_g20_c03.avi",
-    id: "a6c26889-bbe3-46b5-b1d5-7b8f44c7bc3d",
-    media_type: "video"
+    path: "https://github.com/aatmanvaidya/audio-files/raw/main/images/5.jpeg",
+    id: "b6bbfe94-31e5-4a2d-8195-d967d03a85a8",
+    media_type: "image"
   },
   %{
-    path:
-      "https://github.com/tattle-made/feluda_datasets/raw/main/clustering-media/video/v_BandMarching_g11_c05.avi",
-    id: "56a2e260-d69f-4324-b40d-37f0295ad350",
-    media_type: "video"
+    path: "https://github.com/aatmanvaidya/audio-files/raw/main/images/6.jpeg",
+    id: "d1f68565-8571-4c09-89aa-6a02da3fa51a",
+    media_type: "image"
   },
   %{
-    path:
-      "https://github.com/tattle-made/feluda_datasets/raw/main/clustering-media/video/v_BaseballPitch_g24_c02.avi",
-    id: "2d0cf228-9a34-469e-9d57-3644094c34a4",
-    media_type: "video"
+    path: "https://github.com/aatmanvaidya/audio-files/raw/main/images/7.png",
+    id: "4b6ec6c6-4f23-4b96-8b5b-5ecfa6a7b12d",
+    media_type: "image"
   },
   %{
-    path:
-      "https://github.com/tattle-made/feluda_datasets/raw/main/clustering-media/video/v_BasketballDunk_g14_c06.avi",
-    id: "94d79235-0c9c-463f-97c4-6a68bc9f0d6f",
-    media_type: "video"
+    path: "https://github.com/aatmanvaidya/audio-files/raw/main/images/8.jpeg",
+    id: "db2de7b7-ec6e-4726-9397-84efdf45e357",
+    media_type: "image"
   },
   %{
-    path:
-      "https://github.com/tattle-made/feluda_datasets/raw/main/clustering-media/video/v_Basketball_g18_c04.avi",
-    id: "f5050972-847a-4f85-a1c8-3dcedd90c923",
-    media_type: "video"
+    path: "https://github.com/aatmanvaidya/audio-files/raw/main/images/9.jpeg",
+    id: "aad83195-9095-4d72-8505-9a5d38e44c59",
+    media_type: "image"
   },
   %{
-    path:
-      "https://github.com/tattle-made/feluda_datasets/raw/main/clustering-media/video/v_BenchPress_g05_c04.avi",
-    id: "3db8c15a-e5ed-4c3d-8206-1cb9538f2f93",
-    media_type: "video"
+    path: "https://github.com/aatmanvaidya/audio-files/raw/main/images/10.jpg",
+    id: "4a4ff6d3-8b57-482a-a3d6-2fc85e82c1b8",
+    media_type: "image"
   }
 ]
 

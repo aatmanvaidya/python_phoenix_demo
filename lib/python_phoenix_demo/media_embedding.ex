@@ -2,9 +2,9 @@ defmodule PythonPhoenixDemo.MediaEmbedding do
   alias Pythonx, as: Py
   require Logger
 
-  def get_image_embedding() do
-    file_path =
-      "https://tattle-media.s3.amazonaws.com/test-data/tattle-search/text-in-image-test-hindi.png"
+  def get_image_embedding(file_path) do
+    # file_path =
+    #   "https://tattle-media.s3.amazonaws.com/test-data/tattle-search/text-in-image-test-hindi.png"
 
     {:ok, tmp_path} = Briefly.create(extname: ".yml")
     IO.inspect(tmp_path, label: "TMP PATHH")

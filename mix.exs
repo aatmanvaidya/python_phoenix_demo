@@ -59,7 +59,8 @@ defmodule PythonPhoenixDemo.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:pythonx, "~> 0.4.4"},
-      {:briefly, "~> 0.5.0"}
+      {:briefly, "~> 0.5.0"},
+      {:ex_faiss, github: "elixir-nx/ex_faiss"}
     ]
   end
 
