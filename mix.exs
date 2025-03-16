@@ -60,7 +60,9 @@ defmodule PythonPhoenixDemo.MixProject do
       {:bandit, "~> 1.5"},
       {:pythonx, "~> 0.4.4"},
       {:briefly, "~> 0.5.0"},
-      {:ex_faiss, github: "elixir-nx/ex_faiss"}
+      {:ex_faiss, github: "elixir-nx/ex_faiss"},
+      {:oban, "~> 2.19"},
+      {:igniter, "~> 0.5", only: [:dev]}
     ]
   end
 
