@@ -10,7 +10,9 @@ defmodule PythonPhoenixDemo.Application do
     children = [
       PythonPhoenixDemoWeb.Telemetry,
       PythonPhoenixDemo.Repo,
-      {DNSCluster, query: Application.get_env(:python_phoenix_demo, :dns_cluster_query) || :ignore},
+      {DNSCluster,
+       query: Application.get_env(:python_phoenix_demo, :dns_cluster_query) || :ignore},
+      {Oban, Application.fetch_env!(:python_phoenix_demo, Oban)},
       {Phoenix.PubSub, name: PythonPhoenixDemo.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: PythonPhoenixDemo.Finch},

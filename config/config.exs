@@ -7,6 +7,12 @@
 # General application configuration
 import Config
 
+config :python_phoenix_demo, Oban,
+  engine: Oban.Engines.Basic,
+  notifier: Oban.Notifiers.Postgres,
+  queues: [default: 10],
+  repo: PythonPhoenixDemo.Repo
+
 config :python_phoenix_demo,
   ecto_repos: [PythonPhoenixDemo.Repo],
   generators: [timestamp_type: :utc_datetime]

@@ -1,4 +1,5 @@
 import Config
+config :python_phoenix_demo, Oban, testing: :manual
 
 # Configure your database
 #
