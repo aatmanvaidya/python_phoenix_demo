@@ -7,8 +7,8 @@ config :python_phoenix_demo, Oban, testing: :manual
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :python_phoenix_demo, PythonPhoenixDemo.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "python_phoenix_demo",
+  password: "python_phoenix_demo",
   hostname: "localhost",
   database: "python_phoenix_demo_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,

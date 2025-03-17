@@ -9,6 +9,7 @@ defmodule PythonPhoenixDemo.VectorStore do
 
   # Directory where indexes will be stored
   @index_directory "priv/exfaiss_vector_indices"
+  @file_io_flag 0
 
   @doc """
   Initialize a new vector index for a specific media type.
@@ -22,7 +23,7 @@ defmodule PythonPhoenixDemo.VectorStore do
       iex> VectorStore.init_index("image", 512)
       {:ok, %ExFaiss.Index{}}
   """
-  def init_index(index_name, dimension, metric \\ :l2) do
+  def init_index(index_name, dimension) do
     # Ensure directory exists
     File.mkdir_p!(@index_directory)
 
@@ -32,15 +33,15 @@ defmodule PythonPhoenixDemo.VectorStore do
     if File.exists?(index_path) do
       # Load existing index
       Logger.info("Loading existing index: #{index_name}")
-      {:ok, index} = Index.load(index_path)
+      index = Index.from_file(index_path, @file_io_flag)
       {:ok, index}
     else
       # Create a new index
       Logger.info("Creating new index: #{index_name} with dimension #{dimension}")
-      {:ok, index} = Index.new(:flat, dimension, metric)
+      index = Index.new(dimension, "Flat")
 
       # Save the index
-      :ok = Index.save(index, index_path)
+      :ok = Index.to_file(index, index_path)
 
       {:ok, index}
     end
@@ -62,14 +63,34 @@ defmodule PythonPhoenixDemo.VectorStore do
       iex> VectorStore.add_vector("image", [0.1, 0.2, ...], 1)
       :ok
   """
-  def add_vector(index_name, vector, id) do
+
+  def add_vector(index_name, vector) do
+    index_path = index_filepath(index_name)
+
     with {:ok, index} <- get_index(index_name),
-         {:ok, index} <- Index.add_with_ids(index, [vector], [id]),
-         :ok <- Index.save(index, index_filepath(index_name)) do
+         tensor <- Nx.tensor([vector], type: {:f, 32}),
+         index <- Index.add(index, tensor),
+         :ok <- Index.to_file(index, index_path) do
       :ok
     else
       {:error, reason} ->
         Logger.error("Failed to add vector to #{index_name}: #{inspect(reason)}")
+        {:error, "Failed to add vector"}
+    end
+  end
+
+  def add_vector_with_id(index_name, vector, ids) do
+    index_path = index_filepath(index_name)
+
+    with {:ok, index} <- get_index(index_name),
+         tensor <- Nx.tensor([vector], type: {:f, 32}),
+         id_tensor <- Nx.tensor([ids], type: {:s, 64}),
+         index <- Index.add_with_ids(index, tensor, id_tensor),
+         :ok <- Index.to_file(index, index_path) do
+      :ok
+    else
+      {:error, reason} ->
+        Logger.error("Failed to add vector with idsto #{index_name}: #{inspect(reason)}")
         {:error, "Failed to add vector"}
     end
   end
@@ -86,14 +107,22 @@ defmodule PythonPhoenixDemo.VectorStore do
       iex> VectorStore.search("image", [0.1, 0.2, ...], 3)
       {:ok, %{distances: [0.5, 0.7, 0.9], ids: [1, 5, 7]}}
   """
+
   def search(index_name, query_vector, k \\ 5) do
-    with {:ok, index} <- get_index(index_name),
-         {:ok, result} <- Index.search(index, [query_vector], k) do
-      {:ok, result}
-    else
-      {:error, reason} ->
-        Logger.error("Failed to search in index #{index_name}: #{inspect(reason)}")
-        {:error, "Failed to search index"}
+    try do
+      with {:ok, index} <- get_index(index_name),
+           tensor <- Nx.tensor([query_vector], type: {:f, 32}) do
+        result = Index.search(index, tensor, k)
+        {:ok, result}
+      else
+        {:error, reason} ->
+          Logger.error("Failed to search in index #{index_name}: #{inspect(reason)}")
+          {:error, "Failed to search index"}
+      end
+    rescue
+      e ->
+        Logger.error("Exception during search in index #{index_name}: #{inspect(e)}")
+        {:error, "Search operation failed"}
     end
   end
 
@@ -113,6 +142,7 @@ defmodule PythonPhoenixDemo.VectorStore do
         file_size_bytes: 307200
       }}
   """
+
   def get_index_stats(index_name) do
     index_path = index_filepath(index_name)
 
@@ -121,9 +151,8 @@ defmodule PythonPhoenixDemo.VectorStore do
     else
       with {:ok, index} <- get_index(index_name) do
         # Get basic index information
-        {:ok, dimension} = Index.dimension(index)
-        {:ok, total_vectors} = Index.ntotal(index)
-        {:ok, metric_type} = Index.metric_type(index)
+        dimension = index.dim
+        total_vectors = Index.get_num_vectors(index)
 
         # Get file size
         {:ok, %{size: file_size}} = File.stat(index_path)
@@ -132,7 +161,6 @@ defmodule PythonPhoenixDemo.VectorStore do
           name: index_name,
           vector_count: total_vectors,
           dimension: dimension,
-          metric: metric_type,
           file_size_bytes: file_size,
           path: index_path
         }
@@ -153,6 +181,7 @@ defmodule PythonPhoenixDemo.VectorStore do
       iex> VectorStore.list_indices()
       ["image", "video", "text"]
   """
+
   def list_indices do
     @index_directory
     |> File.ls!()
@@ -177,6 +206,7 @@ defmodule PythonPhoenixDemo.VectorStore do
 
     if File.exists?(index_path) do
       File.rm!(index_path)
+      Logger.info("Index #{index_name} Deleted!")
       :ok
     else
       {:error, "Index does not exist"}
@@ -199,27 +229,31 @@ defmodule PythonPhoenixDemo.VectorStore do
       iex> VectorStore.reset_index("image", 512)
       {:ok, %ExFaiss.Index{}}
   """
-  def reset_index(index_name, dimension, metric \\ :l2) do
+  def reset_index(index_name, dimension) do
     # Delete the index if it exists
     _ = delete_index(index_name)
 
     # Create a new one
-    init_index(index_name, dimension, metric)
+    init_index(index_name, dimension)
   end
 
   # Helper function to get an index
-  defp get_index(index_name) do
+  def get_index(index_name) do
     index_path = index_filepath(index_name)
 
     if File.exists?(index_path) do
-      Index.load(index_path)
+      {:ok, Index.from_file(index_path, @file_io_flag)}
     else
       {:error, "Index does not exist"}
     end
+  rescue
+    e ->
+      Logger.error("Failed to load index #{index_name}: #{inspect(e)}")
+      {:error, "Failed to load index"}
   end
 
   # Helper function to build the filepath for an index
-  defp index_filepath(index_name) do
+  def index_filepath(index_name) do
     Path.join(@index_directory, "#{index_name}.faiss")
   end
 end

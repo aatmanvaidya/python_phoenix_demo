@@ -3,9 +3,6 @@ defmodule PythonPhoenixDemo.MediaEmbedding do
   require Logger
 
   def get_image_embedding(file_path) do
-    # file_path =
-    #   "https://tattle-media.s3.amazonaws.com/test-data/tattle-search/text-in-image-test-hindi.png"
-
     {:ok, tmp_path} = Briefly.create(extname: ".yml")
     IO.inspect(tmp_path, label: "TMP PATHH")
 
@@ -32,7 +29,7 @@ defmodule PythonPhoenixDemo.MediaEmbedding do
         image_obj = ImageFactory.make_from_url('#{file_path}')
         operator = feluda.operators.get()["image_vec_rep_resnet"]
         image_vec = operator.run(image_obj)
-        image_vec
+        image_vec.tolist()
         """,
         %{}
       )
@@ -40,8 +37,14 @@ defmodule PythonPhoenixDemo.MediaEmbedding do
     File.rm(tmp_path)
     Briefly.cleanup()
 
-    decoded_result = Py.decode(result)
-    decoded_result
+    case Py.decode(result) do
+      list when is_list(list) ->
+        list
+
+      other ->
+        Logger.error("Unexpected result type from Python: #{inspect(other)}")
+        {:error, "Failed to convert image embedding to list"}
+    end
   rescue
     e ->
       Logger.error("Error in image embedding: #{inspect(e)}")
