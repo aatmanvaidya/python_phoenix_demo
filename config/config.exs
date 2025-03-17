@@ -10,7 +10,7 @@ import Config
 config :python_phoenix_demo, Oban,
   engine: Oban.Engines.Basic,
   notifier: Oban.Notifiers.Postgres,
-  queues: [default: 10],
+  queues: [media_embedding: 10],
   repo: PythonPhoenixDemo.Repo
 
 config :python_phoenix_demo,

@@ -1,2 +1,0 @@
-defmodule PythonPhoenixDemo.MediaVectorService do
-end
