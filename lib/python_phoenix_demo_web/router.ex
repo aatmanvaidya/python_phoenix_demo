@@ -18,6 +18,7 @@ defmodule PythonPhoenixDemoWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/oban_telemetry", ObanTelemetryLive
   end
 
   # Other scopes may use custom stacks.

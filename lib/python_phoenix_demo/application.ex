@@ -13,6 +13,7 @@ defmodule PythonPhoenixDemo.Application do
       {DNSCluster,
        query: Application.get_env(:python_phoenix_demo, :dns_cluster_query) || :ignore},
       {Oban, Application.fetch_env!(:python_phoenix_demo, Oban)},
+      PythonPhoenixDemo.ObanTelemetry,
       {Phoenix.PubSub, name: PythonPhoenixDemo.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: PythonPhoenixDemo.Finch},
